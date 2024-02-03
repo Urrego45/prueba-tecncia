@@ -5,16 +5,12 @@
 
 ## To run commands in the develop environment:
 
-npm install
-npm run dev
+docker compose up
 
 
 ## Install DB:
-  ## In console MySQL:
- CREATE DATABASE prueba_tecnica;
-
- ## In folder this project:
- mysql -u root -p prueba_tecnica < prueba_tecnica_dump.sql
+  ## In conainer docker MySQL:
+ In field `prueba_tecnica_dump.sql` copy and paste in sql termial.
  
  ## Change the credentials in the archive .env
 

@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  db:
+    container_name: db
+    image: mysql:8
+    restart: unless-stopped
+    environment:
+      - MYSQL_DATABASE=prueba_tecnica
+      - MYSQL_ROOT_PASSWORD=12345678
+    ports:
+      - 3306:3306
+    volumes:
+      - db:/var/lib/mysql
+  app:
+    container_name: app
+    depends_on:
+      - db
+    restart: unless-stopped
+    build: .
+    ports:
+      - 3000:3000
+    environment:
+      - DB_HOST=127.0.0.1
+      - DB_USER=root
+      - DB_PASSWORD=12345678
+      - DB_NAME=prueba_tecnica
+      - DB_PORT=3306
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./:/app
+
+volumes:
+  db:

@@ -11,8 +11,3 @@ create table users (
     password VARCHAR(60) NOT NULL
 );
 
-
-
-INSERT INTO users (username, email, password) VALUE (?, ?, ?)
-
-SELECT * FROM users WHERE email = ?

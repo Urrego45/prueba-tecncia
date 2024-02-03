@@ -6,49 +6,48 @@ import { TOKEN_SECRET } from '../config.js';
 
 
 export const register = async (req, res) => {
-    const { username, email, password } = req.body
+  const { username, email, password } = req.body
 
-    try {
+  try {
 
-        const [findEmail] = await pool.query(
-            "SELECT * FROM users WHERE email = ?",
-            [email]
-        )
+    const [findEmail] = await pool.query(
+      "SELECT * FROM users WHERE email = ?",
+      [email]
+    )
 
-        if (findEmail.length > 0) return res.status(400).json({
-            message: "this email is already in use"
-        })
-        
-        const passwordHash = await bcrypt.hash(password, 10)
+    if (findEmail.length > 0) return res.status(400).json({
+      message: "this email is already in use"
+    })
+    
+    const passwordHash = await bcrypt.hash(password, 10)
 
-        const [result] = await pool.query(
-            "INSERT INTO users (username, email, password) VALUE (?, ?, ?)",
-            [username, email, passwordHash]
-        )
+    const [result] = await pool.query(
+      "INSERT INTO users (username, email, password) VALUE (?, ?, ?)",
+      [username, email, passwordHash]
+    )
 
-        const token = await createAccessToken({id: result.insertId})
-        res.cookie('token', token)
+    const token = await createAccessToken({id: result.insertId})
+    res.cookie('token', token)
 
-        res.json({
-            username: username,
-            email: email,
-            password: password
-        })
-        
-    } catch (error) {
-        console.log(error);
-    }
+    res.json({
+      username: username,
+      email: email,
+      password: password
+    })
+      
+  } catch (error) {
+    res.status(500).json({ message: error.message })
+  }
 }
 
 export const listUsers = async (req, res) => {
 
   try {
     const [result] = await pool.query("SELECT * FROM users")
-    console.log(result);
     res.json(result)
       
   } catch (error) {
-    console.log(error);
+    res.status(500).json({ message: error.message })
   }
 }
 
@@ -68,8 +67,6 @@ export const login = async (req, res) => {
 
     const token = await createAccessToken({ id: result.id })
 
-    console.log(result.id);
-
     res.cookie('token', token)
     res.json({
       id: result.id,
@@ -79,7 +76,7 @@ export const login = async (req, res) => {
 
       
   } catch (error) {
-      console.log(error);
+    res.status(500).json({ message: error.message })
   }
 }
 
@@ -92,16 +89,12 @@ export const logout = async (req, res) => {
 }
 
 export const verifyToken = async (req, res) => {
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaa');
 
   const { token } = req.cookies;
-
-  console.log(token);
 
   if (!token) return res.status(401).json({ message: "Unauthorized"})
 
   jwt.verify(token, TOKEN_SECRET, async (error, user) => {
-    console.log(user);
 
     if (error) return res.status(401).json({ message: "Unauthorized" })
 
@@ -109,7 +102,6 @@ export const verifyToken = async (req, res) => {
       "SELECT * FROM users WHERE id = ?",
       [user.id]
     )
-    console.log(userFound);
 
     if (!userFound || userFound.length === 0) return res.status(401).json({ message: "Unauthorized" })
 

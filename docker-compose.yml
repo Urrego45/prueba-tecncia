@@ -6,12 +6,12 @@ services:
     restart: unless-stopped
     env_file: ./.env
     environment:
-      - MYSQL_PASSWORD=12345678
-      - MYSQL_ROOT_PASSWORD=12345678
-      - MYSQL_DATABASE=prueba_tecnica
+      - MYSQL_PASSWORD=$PASSWORD_DATABASE
+      - MYSQL_ROOT_PASSWORD=$PASSWORD_DATABASE
+      - MYSQL_DATABASE=$DATABASE_NAME
 
     ports:
-      - 3306:3306
+      - $PORT_DATABASE:$PORT_DATABASE
     volumes:
       - mysql:/var/lib/mysql
       - ./database:/prueba_tecnica_dump.sql:docker-entrypoint-initdb.d/
@@ -28,11 +28,11 @@ services:
     ports:
       - 3000:3000
     environment:
-      - DB_HOST=mysql
-      - DB_USER=root
-      - DB_PASSWORD=12345678
-      - DB_NAME=prueba_tecnica
-      - DB_PORT=3306
+      - DB_HOST=$HOST_DATABASE
+      - DB_USER=$USER_DATABASE
+      - DB_PASSWORD=$PASSWORD_DATABASE
+      - DB_NAME=$DATABASE_NAME
+      - DB_PORT=$PORT_DATABASE
     stdin_open: true
     tty: true
     volumes:

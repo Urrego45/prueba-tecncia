@@ -10,7 +10,8 @@ docker compose up
 
 ## Install DB:
   ## In conainer docker MySQL:
- `prueba_tecnica_dump.sql` copy and paste in sql termial.
+  It will be created when use command docker `docker compose up`
+ 
  
  ## Change the credentials in the archive .env
 

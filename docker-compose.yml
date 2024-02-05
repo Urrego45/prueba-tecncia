@@ -14,7 +14,7 @@ services:
       - $PORT_DATABASE:$PORT_DATABASE
     volumes:
       - mysql:/var/lib/mysql
-      - ./database:/prueba_tecnica_dump.sql:docker-entrypoint-initdb.d/
+      - ./database/:/docker-entrypoint-initdb.d/
     logging:
       driver: none
 
